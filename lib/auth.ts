@@ -6,8 +6,8 @@ import {
   sessionTable,
   userTable,
   verificationTable,
-} from "@/src/db/schema";
-import { db } from "@/src/db/index";
+} from "@/db/schema";
+import { db } from "@/db/index";
 
 export const auth = betterAuth({
   emailAndPassword: {
