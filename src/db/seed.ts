@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-import { db } from "../index";
+import { db } from "./index";
 import { categoryTable, productTable, productVariantTable } from "./schema";
 
 const productImages = {

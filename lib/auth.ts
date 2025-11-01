@@ -7,7 +7,7 @@ import {
   userTable,
   verificationTable,
 } from "@/src/db/schema";
-import { db } from "@/src/index";
+import { db } from "@/src/db/index";
 
 export const auth = betterAuth({
   emailAndPassword: {
