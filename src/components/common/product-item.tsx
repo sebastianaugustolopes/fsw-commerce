@@ -28,7 +28,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
   return (
     <div className="flex w-[160px] shrink-0 flex-col gap-4 lg:w-full">
-      <Link href={`/product/${product.slug}`} className="relative block w-full">
+      <Link href={`/product-variant/${firstVariant.slug}`} className="relative block w-full">
         <div className="relative aspect-square w-full overflow-hidden rounded-3xl">
           <Image
             src={selectedVariant.imageUrl}
