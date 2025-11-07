@@ -1,8 +1,8 @@
 import { desc } from "drizzle-orm";
 import Image from "next/image";
 
-import { db } from "@/db";
-import { productTable } from "@/db/schema";
+import { db } from "@/src/db";
+import { productTable } from "@/src/db/schema";
 import CategorySelector from "@/src/components/common/category-selector";
 import { Header } from "@/src/components/common/header";
 import ProductList from "@/src/components/common/product-list";

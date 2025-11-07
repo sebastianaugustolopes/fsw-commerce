@@ -2,8 +2,8 @@ import { eq } from "drizzle-orm";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { db } from "@/db";
-import { productTable, productVariantTable } from "@/db/schema";
+import { db } from "@/src/db";
+import { productTable, productVariantTable } from "@/src/db/schema";
 import Footer from "@/src/components/common/footer";
 import { Header } from "@/src/components/common/header";
 import ProductList from "@/src/components/common/product-list";

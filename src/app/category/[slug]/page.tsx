@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
-import { db } from "@/db";
-import { categoryTable, productTable } from "@/db/schema";
+import { db } from "@/src/db";
+import { categoryTable, productTable } from "@/src/db/schema";
 import { Header } from "@/src/components/common/header";
 import ProductItem from "@/src/components/common/product-item";
 

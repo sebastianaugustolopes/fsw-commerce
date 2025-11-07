@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { productVariantTable } from "@/db/schema";
+import { productVariantTable } from "@/src/db/schema";
 
 interface VariantSelectorProps {
   selectedVariantSlug: string;

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { productTable, productVariantTable } from "@/db/schema";
+import { productTable, productVariantTable } from "@/src/db/schema";
 import { cn } from "@/lib/utils";
 import { formatCentsToBRL } from "@/src/helpers/money";
 
@@ -28,7 +28,10 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
   return (
     <div className="flex w-[160px] shrink-0 flex-col gap-4 lg:w-full">
-      <Link href={`/product-variant/${firstVariant.slug}`} className="relative block w-full">
+      <Link
+        href={`/product-variant/${firstVariant.slug}`}
+        className="relative block w-full"
+      >
         <div className="relative aspect-square w-full overflow-hidden rounded-3xl">
           <Image
             src={selectedVariant.imageUrl}
