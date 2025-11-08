@@ -1,13 +1,13 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
-import { db } from "@/db/index";
+import { db } from "@/src/db/index";
 import {
   accountTable,
   sessionTable,
   userTable,
   verificationTable,
-} from "@/db/schema";
+} from "@/src/db/schema";
 
 export const auth = betterAuth({
   socialProviders: {
