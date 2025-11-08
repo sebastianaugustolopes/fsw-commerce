@@ -26,6 +26,7 @@ import {
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { useCreateShippingAddress } from "@/src/hooks/mutations/use-create-shipping-address";
+import { useUserAddresses } from "@/src/hooks/queries/use-user-addresses";
 
 const formSchema = z.object({
   email: z.email("E-mail inválido"),
@@ -46,6 +47,7 @@ type FormValues = z.infer<typeof formSchema>;
 const Addresses = () => {
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
   const createShippingAddressMutation = useCreateShippingAddress();
+  const { data: addresses, isLoading } = useUserAddresses();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -66,10 +68,11 @@ const Addresses = () => {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await createShippingAddressMutation.mutateAsync(values);
+      const newAddress =
+        await createShippingAddressMutation.mutateAsync(values);
       toast.success("Endereço criado com sucesso!");
       form.reset();
-      setSelectedAddress(null);
+      setSelectedAddress(newAddress.id);
     } catch (error) {
       toast.error("Erro ao criar endereço. Tente novamente.");
       console.error(error);
@@ -82,16 +85,57 @@ const Addresses = () => {
         <CardTitle>Identificação</CardTitle>
       </CardHeader>
       <CardContent>
-        <RadioGroup value={selectedAddress} onValueChange={setSelectedAddress}>
-          <Card>
-            <CardContent>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="add_new" id="add_new" />
-                <Label htmlFor="add_new">Adicionar novo endereço</Label>
+        {isLoading ? (
+          <div className="py-4 text-center">
+            <p>Carregando endereços...</p>
+          </div>
+        ) : (
+          <RadioGroup
+            value={selectedAddress}
+            onValueChange={setSelectedAddress}
+          >
+            {addresses?.length === 0 && (
+              <div className="py-4 text-center">
+                <p className="text-muted-foreground">
+                  Você ainda não possui endereços cadastrados.
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        </RadioGroup>
+            )}
+
+            {addresses?.map((address) => (
+              <Card key={address.id}>
+                <CardContent>
+                  <div className="flex items-start space-x-2">
+                    <RadioGroupItem value={address.id} id={address.id} />
+                    <div className="flex-1">
+                      <Label htmlFor={address.id} className="cursor-pointer">
+                        <div>
+                          <p className="text-sm">
+                            {address.recipientName} • {address.street},{" "}
+                            {address.number}
+                            {address.complement &&
+                              `, ${address.complement}`}, {address.neighborhood}
+                            , {address.city} - {address.state} • CEP:{" "}
+                            {address.zipCode}
+                          </p>
+                        </div>
+                      </Label>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
+            <Card>
+              <CardContent>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="add_new" id="add_new" />
+                  <Label htmlFor="add_new">Adicionar novo endereço</Label>
+                </div>
+              </CardContent>
+            </Card>
+          </RadioGroup>
+        )}
 
         {selectedAddress === "add_new" && (
           <Form {...form}>
