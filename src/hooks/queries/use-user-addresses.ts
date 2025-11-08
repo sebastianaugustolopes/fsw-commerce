@@ -1,12 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getUserAddresses } from "@/src/actions/get-user-addresses";
+import { shippingAddressTable } from "@/src/db/schema";
 
 export const getUserAddressesQueryKey = () => ["user-addresses"] as const;
 
-export const useUserAddresses = () => {
+export const useUserAddresses = (params?: {
+  initialData?: (typeof shippingAddressTable.$inferSelect)[];
+}) => {
   return useQuery({
     queryKey: getUserAddressesQueryKey(),
     queryFn: getUserAddresses,
+    initialData: params?.initialData,
   });
 };
