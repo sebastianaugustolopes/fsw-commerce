@@ -42,6 +42,7 @@ export const finishOrder = async () => {
     (acc, item) => acc + item.productVariant.priceInCents * item.quantity,
     0,
   );
+  let orderId: string | undefined;
   await db.transaction(async (tx) => {
     if (!cart.shippingAddress) {
       throw new Error("Shipping address not found");
@@ -80,4 +81,8 @@ export const finishOrder = async () => {
     await tx.delete(cartTable).where(eq(cartTable.id, cart.id));
     await tx.delete(cartItemTable).where(eq(cartItemTable.cartId, cart.id));
   });
+  if (!orderId) {
+    throw new Error("Failed to create order");
+  }
+  return { orderId };
 };
