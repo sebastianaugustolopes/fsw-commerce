@@ -81,7 +81,7 @@ const SignUpForm = () => {
 
   return (
     <>
-      <Card>
+      <Card className="w-md">
         <CardHeader>
           <CardTitle>Criar conta</CardTitle>
           <CardDescription>Crie uma conta para continuar.</CardDescription>
@@ -152,7 +152,7 @@ const SignUpForm = () => {
               />
             </CardContent>
             <CardFooter>
-              <Button type="submit">Criar conta</Button>
+              <Button type="submit" className="rounded-4xl">Criar conta</Button>
             </CardFooter>
           </form>
         </Form>
