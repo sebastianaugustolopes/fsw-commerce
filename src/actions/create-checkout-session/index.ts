@@ -71,5 +71,5 @@ export const createCheckoutSession = async (
       };
     }),
   });
-  return checkoutSession;
+  return { url: checkoutSession.url };
 };

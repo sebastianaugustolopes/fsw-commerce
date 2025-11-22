@@ -1,6 +1,4 @@
 "use client";
-
-import { loadStripe } from "@stripe/stripe-js";
 import { Loader2 } from "lucide-react";
 
 import { createCheckoutSession } from "@/src/actions/create-checkout-session";
@@ -10,22 +8,13 @@ import { useFinishOrder } from "@/src/hooks/mutations/use-finish-order";
 const FinishOrderButton = () => {
   const finishOrderMutation = useFinishOrder();
   const handleFinishOrder = async () => {
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-      throw new Error("Stripe publishable key is not set");
-    }
     const { orderId } = await finishOrderMutation.mutateAsync();
-    const checkoutSession = await createCheckoutSession({
-      orderId,
-    });
-    const stripe = await loadStripe(
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-    );
-    if (!stripe) {
-      throw new Error("Failed to load Stripe");
+    const checkoutSession = await createCheckoutSession({ orderId });
+    if (!checkoutSession || !checkoutSession.url) {
+      throw new Error("Failed to create checkout session");
     }
-    await stripe.redirectToCheckout({
-      sessionId: checkoutSession.id,
-    });
+    // Redirect the browser to the Stripe Checkout url returned by the server
+    window.location.href = checkoutSession.url;
   };
   return (
     <>
