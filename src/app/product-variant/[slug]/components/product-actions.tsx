@@ -3,9 +3,13 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/src/components/ui/button";
 
 import AddToCartButton from "./add-to-cart-button";
+import { addProductToCart } from "@/src/actions/add-cart-product";
 
 interface ProductActionsProps {
   productVariantId: string;
@@ -13,6 +17,8 @@ interface ProductActionsProps {
 
 const ProductActions = ({ productVariantId }: ProductActionsProps) => {
   const [quantity, setQuantity] = useState(1);
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const handleDecrement = () => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
@@ -21,6 +27,17 @@ const ProductActions = ({ productVariantId }: ProductActionsProps) => {
   const handleIncrement = () => {
     setQuantity((prev) => prev + 1);
   };
+
+  const buyNowMutation = useMutation({
+    mutationKey: ["addProductToCart", productVariantId, quantity, "buy-now"],
+    mutationFn: async () => {
+      return await addProductToCart({ productVariantId, quantity });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      router.push("/cart/identification");
+    },
+  });
 
   return (
     <>
@@ -43,8 +60,13 @@ const ProductActions = ({ productVariantId }: ProductActionsProps) => {
           productVariantId={productVariantId}
           quantity={quantity}
         />
-        <Button className="rounded-full" size="lg">
-          Comprar agora
+        <Button
+          className="rounded-full"
+          size="lg"
+          onClick={() => buyNowMutation.mutate()}
+          disabled={buyNowMutation.isPending}
+        >
+          {buyNowMutation.isPending ? "Processando..." : "Comprar agora"}
         </Button>
       </div>
     </>
