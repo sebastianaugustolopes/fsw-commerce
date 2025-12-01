@@ -1,13 +1,15 @@
 import { desc } from "drizzle-orm";
 import Image from "next/image";
 
+import CategorySelector from "@/src/components/common/category-selector";
+import ProductList from "@/src/components/common/product-list";
 import { db } from "@/src/db";
 import { productTable } from "@/src/db/schema";
-import CategorySelector from "@/src/components/common/category-selector";
-import { Header } from "@/src/components/common/header";
-import ProductList from "@/src/components/common/product-list";
 
+import PartnerBrandsCarousel from "../components/common/brands-logos";
+import ProductCard from "../components/common/Card/product-card";
 import Footer from "../components/common/footer";
+import { Header } from "../components/common/header";
 
 const Home = async () => {
   const products = await db.query.productTable.findMany({
@@ -31,31 +33,31 @@ const Home = async () => {
       <div className="space-y-6">
         <div className="px-5">
           <Image
-            src="/banner-01.png"
+            src="/mobile-banner-01.png"
             alt="Leve uma vida com estilo"
             height={0}
             width={0}
             sizes="100vw"
-            className="h-auto w-full"
+            className="block h-auto w-full lg:hidden"
           />
+          <Image
+            src="/desktop-banner-01.jpg"
+            alt="Leve uma vida com estilo"
+            height={0}
+            width={0}
+            sizes="100vw"
+            className="h-sreen hidden w-screen lg:block"
+          />
+        </div>
+        <div className="hidden lg:block">
+          <PartnerBrandsCarousel />
         </div>
 
         <ProductList products={products} title="Mais vendidos" />
-
-        <div className="px-5">
+        <div className="block lg:hidden">
           <CategorySelector categories={categories} />
         </div>
-
-        <div className="px-5">
-          <Image
-            src="/banner-02.png"
-            alt="Leve uma vida com estilo"
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="h-auto w-full"
-          />
-        </div>
+        <ProductCard />
         <ProductList products={newlyCreatedProducts} title="Novos produtos" />
         <Footer />
       </div>
