@@ -5,7 +5,7 @@ const LoginMobile = () => {
   return (
     <div className="fixed inset-0 h-screen w-screen overflow-hidden">
       <Image
-        src="/mobile-cover.jpg"
+        src="/loginpage-mobile-cover.jpg"
         alt="Mobile cover"
         fill
         sizes="100vw"

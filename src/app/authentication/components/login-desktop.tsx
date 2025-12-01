@@ -14,7 +14,7 @@ const LoginDesktop = async () => {
   return (
     <div className="flex w-screen h-screen justify-center items-center gap-10 p-5">
       <Image
-        src="/desktop-cover.jpg"
+        src="/loginpage-desktop-cover.jpg"
         alt="Desktop cover"
         height={0}
         width={0}
