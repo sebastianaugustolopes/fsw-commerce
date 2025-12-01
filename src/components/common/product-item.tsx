@@ -4,15 +4,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import { productTable, productVariantTable } from "@/src/db/schema";
 import { cn } from "@/lib/utils";
-import { formatCentsToBRL } from "@/src/helpers/money";
+
+interface ProductVariant {
+  id: string;
+  name: string;
+  slug: string;
+  imageUrl: string;
+  color: string;
+  priceInCents: number;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  variants: ProductVariant[];
+}
 
 interface ProductItemProps {
-  product: typeof productTable.$inferSelect & {
-    variants: (typeof productVariantTable.$inferSelect)[];
-  };
+  product: Product;
 }
+
+const formatCentsToBRL = (cents: number) => {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(cents / 100);
+};
 
 const ProductItem = ({ product }: ProductItemProps) => {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
@@ -27,19 +47,21 @@ const ProductItem = ({ product }: ProductItemProps) => {
   const hasMultipleVariants = product.variants.length > 1;
 
   return (
-    <div className="flex w-[160px] shrink-0 flex-col gap-4 lg:w-full">
-      <Link
+    <div className="flex h-full w-full flex-col gap-4">
+      <a
         href={`/product-variant/${firstVariant.slug}`}
         className="relative block w-full"
       >
-        <div className="relative aspect-square w-full overflow-hidden rounded-3xl">
-          <Image
-            src={selectedVariant.imageUrl}
-            alt={selectedVariant.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 50vw, (max-width: 1280px) 20vw, 300px"
-          />
+        <div className="bg-muted relative aspect-square w-full overflow-hidden rounded-3xl">
+          <div className="relative h-full w-full">
+            <Image
+              src={selectedVariant.imageUrl}
+              alt={selectedVariant.name}
+              fill
+              className="object-cover object-center"
+            />
+          </div>
+
           {hasMultipleVariants && (
             <div className="absolute bottom-2 left-2 flex gap-1">
               {product.variants.map((variant, index) => (
@@ -62,9 +84,9 @@ const ProductItem = ({ product }: ProductItemProps) => {
             </div>
           )}
         </div>
-      </Link>
-      <div className="flex min-h-[80px] flex-col gap-1">
-        <Link href={`/product/${product.slug}`}>
+      </a>
+      <div className="flex min-h-[120px] flex-col gap-1">
+        <Link href={`/product-variant/${firstVariant.slug}`}>
           <p className="truncate text-sm font-medium">{product.name}</p>
         </Link>
         <p className="text-muted-foreground line-clamp-2 text-xs font-medium">
