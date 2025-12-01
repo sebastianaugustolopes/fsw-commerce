@@ -1,88 +1,66 @@
-"use client";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { LogInIcon, LogOutIcon, MenuIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
-import { Button } from "@/src/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/src/components/ui/sheet";
-import { authClient } from "@/lib/auth-client";
+import { db } from "@/src/db";
+
 import { Cart } from "./cart";
+import Logo from "./logo";
+import { MenuNavigation } from "./menu-mobile-navigation";
+import { NavbarAboutButton } from "./navbar-about-button";
+import { NavbarCategoriesDropdown } from "./navbar-categories-dropdown";
+import { NavbarUserMenu } from "./navbar-user-menu";
 
-export const Header = () => {
-  const { data: session } = authClient.useSession();
+export const Header = async () => {
+  const categories = await db.query.categoryTable.findMany();
+
   return (
-    <header className="flex items-center justify-between p-5">
-      <Link href="/">
-        <div className="w-10">
-          <Image src="/logo.png" alt="BEWEAR" width={100} height={100} />
-        </div>
-      </Link>
+    <>
+      <header className="border-border bg-background sticky top-0 z-50 w-full shadow-sm">
+        {/* Top bar */}
+        <div className="flex items-center justify-between px-6 py-4">
+          {/* Logo */}
+          <Logo />
 
-      <div className="flex items-center gap-2">
-        <Cart />
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
-              <MenuIcon />
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Menu</SheetTitle>
-            </SheetHeader>
-            <div className="px-5">
-              {session?.user ? (
-                <>
-                  <div className="flex justify-between space-y-6">
-                    <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarImage
-                          src={session?.user?.image as string | undefined}
-                        />
-                        <AvatarFallback>
-                          {session?.user?.name?.split(" ")?.[0]?.[0]}
-                          {session?.user?.name?.split(" ")?.[1]?.[0]}
-                        </AvatarFallback>
-                      </Avatar>
+          {/* Right side actions */}
+          <div className="flex items-center gap-3">
+            {/* Cart */}
+            <Cart />
 
-                      <div>
-                        <h3 className="font-semibold">{session?.user?.name}</h3>
-                        <span className="text-muted-foreground block text-xs">
-                          {session?.user?.email}
-                        </span>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => authClient.signOut()}
-                    >
-                      <LogOutIcon />
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <h2 className="font-semibold">Olá. Faça seu login!</h2>
-                  <Button size="icon" asChild variant="outline">
-                    <Link href="/authentication">
-                      <LogInIcon />
-                    </Link>
-                  </Button>
-                </div>
-              )}
+            {/* User menu monile*/}
+            <div className="block lg:hidden">
+              <MenuNavigation />
             </div>
-          </SheetContent>
-        </Sheet>
-      </div>
-    </header>
+
+            {/* User menu desktop*/}
+            <div className="hidden lg:block">
+              <NavbarUserMenu />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar com categorias */}
+        <div className="border-border bg-muted/30 hidden border-t lg:block">
+          <nav className="flex items-center justify-start gap-8 px-6 py-3">
+            <Link
+              href="/"
+              className="text-foreground hover:text-primary text-sm font-medium transition-colors"
+            >
+              Início
+            </Link>
+
+            {/* Categories dropdown */}
+            <NavbarCategoriesDropdown categories={categories} />
+
+            <Link
+              href="/my-orders"
+              className="text-foreground hover:text-primary text-sm font-medium transition-colors"
+            >
+              Meus Pedidos
+            </Link>
+
+            <NavbarAboutButton />
+          </nav>
+        </div>
+      </header>
+    </>
   );
 };
