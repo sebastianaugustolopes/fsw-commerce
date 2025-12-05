@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,7 +17,7 @@ const CheckoutSuccessPage = () => {
   return (
     <>
       <Header />
-      <Dialog open={true} onOpenChange={() => {}}>
+      <Dialog open={true}>
         <DialogContent className="text-center">
           <Image
             src="/illustration.svg"
@@ -25,6 +27,7 @@ const CheckoutSuccessPage = () => {
             className="mx-auto"
           />
           <DialogTitle className="mt-4 text-2xl">Pedido efetuado!</DialogTitle>
+
           <DialogDescription className="font-medium">
             Seu pedido foi efetuado com sucesso. Você pode acompanhar o status
             na seção de “Meus Pedidos”.
@@ -34,6 +37,7 @@ const CheckoutSuccessPage = () => {
             <Button className="rounded-full" size="lg">
               Ver meus pedidos
             </Button>
+
             <Button
               className="rounded-full"
               variant="outline"
