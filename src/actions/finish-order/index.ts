@@ -35,8 +35,10 @@ export const finishOrder = async () => {
   if (!cart) throw new Error("Cart not found");
 
   if (!cart.shippingAddress) {
-    return redirect("/cart/identification"); // 🔥 Evita erro 500
+    redirect("/cart/identification");
   }
+
+  const shipping = cart.shippingAddress;
 
   const totalPriceInCents = cart.items.reduce(
     (acc, item) => acc + item.productVariant.priceInCents * item.quantity,
@@ -49,27 +51,26 @@ export const finishOrder = async () => {
     const [order] = await tx
       .insert(orderTable)
       .values({
-        email: cart.shippingAddress.email,
-        zipCode: cart.shippingAddress.zipCode,
-        country: cart.shippingAddress.country,
-        phone: cart.shippingAddress.phone,
-        cpfOrCnpj: cart.shippingAddress.cpfOrCnpj,
-        city: cart.shippingAddress.city,
-        complement: cart.shippingAddress.complement,
-        neighborhood: cart.shippingAddress.neighborhood,
-        number: cart.shippingAddress.number,
-        recipientName: cart.shippingAddress.recipientName,
-        state: cart.shippingAddress.state,
-        street: cart.shippingAddress.street,
+        email: shipping.email,
+        zipCode: shipping.zipCode,
+        country: shipping.country,
+        phone: shipping.phone,
+        cpfOrCnpj: shipping.cpfOrCnpj,
+        city: shipping.city,
+        complement: shipping.complement,
+        neighborhood: shipping.neighborhood,
+        number: shipping.number,
+        recipientName: shipping.recipientName,
+        state: shipping.state,
+        street: shipping.street,
         userId: session.user.id,
         totalPriceInCents,
-        shippingAddressId: cart.shippingAddress.id,
+        shippingAddressId: shipping.id,
       })
       .returning();
 
     if (!order) throw new Error("Failed to create order");
 
-    // 🔥 ESSA LINHA FALTAVA!
     orderId = order.id;
 
     const orderItemsPayload = cart.items.map((item) => ({
