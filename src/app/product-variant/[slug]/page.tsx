@@ -41,19 +41,19 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
   return (
     <>
       <Header />
-      <main className="bg-background min-h-screen">
+      <main className="min-h-screen bg-background">
         {/* Main Product Section */}
-        <div className="border-b px-4 py-6 sm:px-6 lg:px-8">
+        <div className="border-b px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
           <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[auto_1fr_380px] lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-[100px_1fr_400px] lg:gap-8">
               {/* Left: Vertical Thumbnails (Desktop Only) */}
               <div className="hidden lg:block">
-                <div className="flex flex-col gap-2">
+                <div className="sticky top-6 flex flex-col gap-2">
                   {productVariant.product.variants.map((v) => (
                     <Link
                       key={v.id}
                       href={`/product-variant/${v.slug}`}
-                      className={`block shrink-0 overflow-hidden rounded-lg border-2 transition-all hover:shadow-md ${
+                      className={`block h-20 w-20 shrink-0 overflow-hidden rounded-lg border-2 transition-all hover:shadow-md ${
                         v.slug === productVariant.slug
                           ? "border-primary shadow-md"
                           : "border-border"
@@ -64,7 +64,7 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
                         alt={v.name}
                         width={80}
                         height={80}
-                        className="object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </Link>
                   ))}
@@ -73,18 +73,21 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
 
               {/* Center: Main Image */}
               <div className="flex flex-col gap-4">
-                <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-2xl sm:aspect-square lg:rounded-3xl">
-                  <Image
-                    src={productVariant.imageUrl}
-                    alt={productVariant.name}
-                    fill
-                    sizes="(min-width: 1024px) 50vw, (min-width: 640px) 80vw, 100vw"
-                    priority
-                    className="object-cover object-center"
-                  />
+                <div className="relative w-full overflow-hidden rounded-2xl bg-muted lg:rounded-3xl">
+                  {/* Container com aspect ratio responsivo */}
+                  <div className="aspect-square w-full sm:aspect-[4/3] lg:aspect-square">
+                    <Image
+                      src={productVariant.imageUrl}
+                      alt={productVariant.name}
+                      fill
+                      priority
+                      className="object-contain object-center p-4 sm:p-6 lg:p-8"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
+                    />
+                  </div>
                 </div>
 
-                {/* Mobile: Variant Selector Under Image */}
+                {/* Mobile/Tablet: Variant Selector Under Image */}
                 <div className="lg:hidden">
                   <VariantSelector
                     selectedVariantSlug={productVariant.slug}
@@ -94,16 +97,16 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
               </div>
 
               {/* Right: Details & Actions */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 md:gap-6">
                 {/* Title & Price */}
                 <div className="space-y-2">
-                  <p className="text-muted-foreground text-xs font-medium uppercase">
+                  <p className="text-xs font-medium uppercase text-muted-foreground">
                     {productVariant.product.name}
                   </p>
-                  <h1 className="text-xl font-bold sm:text-2xl lg:text-xl">
+                  <h1 className="text-2xl font-bold leading-tight sm:text-3xl lg:text-2xl xl:text-3xl">
                     {productVariant.name}
                   </h1>
-                  <p className="text-2xl font-bold sm:text-3xl lg:text-2xl">
+                  <p className="text-3xl font-bold sm:text-4xl lg:text-3xl xl:text-4xl">
                     {formatCentsToBRL(productVariant.priceInCents)}
                   </p>
                 </div>
@@ -115,18 +118,18 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
                       <Link
                         key={v.id}
                         href={`/product-variant/${v.slug}`}
-                        className={`shrink-0 overflow-hidden rounded-lg border-2 transition-transform hover:scale-105 ${
+                        className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 transition-all hover:scale-105 hover:shadow-sm ${
                           v.slug === productVariant.slug
-                            ? "border-primary"
+                            ? "border-primary shadow-sm"
                             : "border-border"
                         }`}
                       >
                         <Image
                           src={v.imageUrl}
                           alt={v.name}
-                          width={60}
-                          height={60}
-                          className="object-cover"
+                          width={64}
+                          height={64}
+                          className="h-full w-full object-cover"
                         />
                       </Link>
                     ))}
@@ -134,14 +137,16 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
                 </div>
 
                 {/* Actions: Quantity & Buttons */}
-                <div className="space-y-3">
+                <div className="space-y-3 lg:space-y-4">
                   <ProductActions productVariantId={productVariant.id} />
                 </div>
 
                 {/* Description */}
                 <div className="space-y-2 border-t pt-4">
-                  <h3 className="text-sm font-semibold">Descrição</h3>
-                  <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
+                  <h3 className="text-sm font-semibold lg:text-base">
+                    Descrição
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
                     {productVariant.product.description}
                   </p>
                 </div>
@@ -151,7 +156,7 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
         </div>
 
         {/* Recommendations Section */}
-        <div className="px-4 py-8 sm:px-6 lg:px-8">
+        <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
           <div className="mx-auto max-w-7xl">
             <ProductList title="Talvez você goste" products={likelyProducts} />
           </div>

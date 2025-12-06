@@ -2,7 +2,7 @@ import ImageBlocks from "@/src/components/common/Card/ImageBlocks";
 
 const ProductCard = () => {
   return (
-    <div className="bg-background min-h-screen p-4 md:p-8 lg:p-12">
+    <div className="bg-background min-h-auto p-4 md:p-8 lg:p-12">
       <div className="mx-auto max-w-[1400px]">
         {/* Mobile Layout - Stacked */}
         <div className="flex flex-col gap-6 md:hidden">

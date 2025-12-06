@@ -1,5 +1,6 @@
 import { desc } from "drizzle-orm";
 import Image from "next/image";
+import Link from "next/link";
 
 import CategorySelector from "@/src/components/common/category-selector";
 import ProductList from "@/src/components/common/product-list";
@@ -32,22 +33,26 @@ const Home = async () => {
       <Header />
       <div className="space-y-6">
         <div className="px-5">
-          <Image
-            src="/mobile-banner-01.png"
-            alt="Leve uma vida com estilo"
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="block h-auto w-full lg:hidden"
-          />
-          <Image
-            src="/desktop-banner-01.jpg"
-            alt="Leve uma vida com estilo"
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="h-sreen hidden w-screen lg:block"
-          />
+          <Link href={"/category/jaquetas-moletons"}>
+            <Image
+              src="/mobile-banner-01.png"
+              alt="Leve uma vida com estilo"
+              height={0}
+              width={0}
+              sizes="100vw"
+              className="block h-auto w-full lg:hidden"
+            />
+          </Link>
+          <Link href={"/category/jaquetas-moletons"}>
+            <Image
+              src="/desktop-banner-01.jpg"
+              alt="Leve uma vida com estilo"
+              height={0}
+              width={0}
+              sizes="100vw"
+              className="h-sreen hidden w-screen lg:block"
+            />
+          </Link>
         </div>
         <div className="hidden lg:block">
           <PartnerBrandsCarousel />
