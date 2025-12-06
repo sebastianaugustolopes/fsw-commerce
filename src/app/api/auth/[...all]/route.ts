@@ -2,7 +2,7 @@ import { toNextJsHandler } from "better-auth/next-js";
 
 import { auth } from "@/lib/auth";
 
-const { GET, POST } = toNextJsHandler(auth.handler);
+const { GET: authGET, POST: authPOST } = toNextJsHandler(auth.handler);
 
 // Add CORS headers
 const addCorsHeaders = (response: Response) => {
@@ -19,12 +19,12 @@ const addCorsHeaders = (response: Response) => {
 };
 
 export async function GET(request: Request) {
-  const response = await GET(request);
+  const response = await authGET(request);
   return addCorsHeaders(response);
 }
 
 export async function POST(request: Request) {
-  const response = await POST(request);
+  const response = await authPOST(request);
   return addCorsHeaders(response);
 }
 
