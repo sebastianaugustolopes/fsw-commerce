@@ -20,6 +20,8 @@ import CartItem from "./cart-item";
 
 export const Cart = () => {
   const { data: cart } = useCart();
+  const isCartEmpty = !cart?.items || cart.items.length === 0;
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -33,59 +35,76 @@ export const Cart = () => {
         </SheetHeader>
 
         <div className="flex h-full flex-col px-5 pb-5">
-          <div className="flex h-full max-h-full flex-col overflow-hidden">
-            <ScrollArea className="h-full">
-              <div className="flex h-full flex-col gap-8">
-                {cart?.items.map((item) => (
-                  <CartItem
-                    key={item.id}
-                    id={item.id}
-                    productVariantId={item.productVariant.id}
-                    productName={item.productVariant.product.name}
-                    productVariantName={item.productVariant.name}
-                    productVariantImageUrl={item.productVariant.imageUrl}
-                    productVariantPriceInCents={
-                      item.productVariant.priceInCents
-                    }
-                    quantity={item.quantity}
-                  />
-                ))}
+          {isCartEmpty ? (
+            <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+              <div className="bg-muted rounded-full p-6">
+                <ShoppingBasketIcon className="text-muted-foreground h-12 w-12" />
               </div>
-            </ScrollArea>
-          </div>
-
-          {cart?.items && cart?.items.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <Separator />
-
-              <div className="flex items-center justify-between text-xs font-medium">
-                <p>Subtotal</p>
-                <p>{formatCentsToBRL(cart?.totalPriceInCents ?? 0)}</p>
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">
+                  Seu carrinho está vazio
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  Adicione produtos ao carrinho para continuar
+                </p>
               </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between text-xs font-medium">
-                <p>Entrega</p>
-                <p>GRÁTIS</p>
-              </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between text-xs font-medium">
-                <p>Total</p>
-                <p>{formatCentsToBRL(cart?.totalPriceInCents ?? 0)}</p>
-              </div>
-
-              <Button className="mt-5 rounded-full" asChild>
-                <Link href="/cart/identification">Finalizar compra</Link>
+              <Button className="mt-4 rounded-full" asChild>
+                <Link href="/">Continuar comprando</Link>
               </Button>
             </div>
+          ) : (
+            <>
+              <div className="flex h-full max-h-full flex-col overflow-hidden">
+                <ScrollArea className="h-full">
+                  <div className="flex h-full flex-col gap-8">
+                    {cart?.items.map((item) => (
+                      <CartItem
+                        key={item.id}
+                        id={item.id}
+                        productVariantId={item.productVariant.id}
+                        productName={item.productVariant.product.name}
+                        productVariantName={item.productVariant.name}
+                        productVariantImageUrl={item.productVariant.imageUrl}
+                        productVariantPriceInCents={
+                          item.productVariant.priceInCents
+                        }
+                        quantity={item.quantity}
+                      />
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <Separator />
+
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <p>Subtotal</p>
+                  <p>{formatCentsToBRL(cart?.totalPriceInCents ?? 0)}</p>
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <p>Entrega</p>
+                  <p>GRÁTIS</p>
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <p>Total</p>
+                  <p>{formatCentsToBRL(cart?.totalPriceInCents ?? 0)}</p>
+                </div>
+
+                <Button className="mt-5 rounded-full" asChild>
+                  <Link href="/cart/identification">Finalizar compra</Link>
+                </Button>
+              </div>
+            </>
           )}
         </div>
       </SheetContent>
     </Sheet>
   );
 };
-
-// SERVER ACTION
